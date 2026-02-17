@@ -1,0 +1,23 @@
+name: Daily Model Training
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - run: pip install -r requirements.txt
+
+      - name: Train model
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+        run: python src/train_incremental.py
