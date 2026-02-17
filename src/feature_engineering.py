@@ -5,7 +5,7 @@ import hopsworks
 import pandas as pd
 import hopsworks
 import pandas as pd
-z
+
 
 def cyclic (angle: float, total_angle: float) -> tuple[float, float]:
     if total_angle == 0:
