@@ -22,6 +22,5 @@ jobs:
       - name: Run ingestion
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
           AQI_API_KEY: ${{ secrets.AQI_API_KEY }}
-        run: python src/fetch_data.py
+        run: python src/store_features.py
