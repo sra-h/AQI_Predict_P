@@ -20,4 +20,4 @@ jobs:
       - name: Train model
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-        run: python src/train_incremental.py
+        run: python src/incremental_training.py
