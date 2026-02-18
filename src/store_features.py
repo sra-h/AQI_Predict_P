@@ -78,8 +78,8 @@ co_lag_1 = feature_engineering.lag_feature( co, datetime_unix, 1, "aqi_data", 2)
 co_lag_3 = feature_engineering.lag_feature( co, datetime_unix, 3, "aqi_data", 2)
 co_lag_6 = feature_engineering.lag_feature( co, datetime_unix, 6, "aqi_data", 2)
 no2_lag_1 = feature_engineering.lag_feature( no2, datetime_unix, 1, "aqi_data", 2)
-no2_lag_1 = feature_engineering.lag_feature( no2, datetime_unix, 1, "aqi_data", 2)
-no2_lag_1 = feature_engineering.lag_feature( no2, datetime_unix, 1, "aqi_data", 2)
+no2_lag_3 = feature_engineering.lag_feature( no2, datetime_unix, 1, "aqi_data", 2)
+no2_lag_6 = feature_engineering.lag_feature( no2, datetime_unix, 1, "aqi_data", 2)
 
 
 
@@ -88,18 +88,18 @@ project = fetch_current.connect()
 
 fs = project.get_feature_store()
 
-weather_lag = fs.get_feature_group(name = "weather_lag_data", version= 1)
-aqi_lag = fs.get_feature_group(name = "aqi_lag_data", version= 1)
-weather_rolling = fs.get_feature_group(name = "weather_rolling_data", version= 1)
-aqi_rolling = fs.get_feature_group(name = "aqi_rolling_data", version= 1)
-aqi_data = fs.get_feature_group(name = "aqi_data", version= 2)
-weather_data =fs.get_feature_group(name = "weather_data", version= 1)
-time_features = fs.get_feature_groupe(name = "time_features", version= 1)
+weather_lag = fs.get_feature_group(name = "weather_lag_data", version= 1) # 01
+aqi_lag = fs.get_feature_group(name = "aqi_lag_data", version= 1)  #02
+weather_rolling = fs.get_feature_group(name = "weather_rolling_data", version= 1)  #03
+aqi_rolling = fs.get_feature_group(name = "aqi_rolling_data", version= 1)  #04
+aqi_data = fs.get_feature_group(name = "aqi_data", version= 2)    #5
+weather_data =fs.get_feature_group(name = "weather_data", version= 1)    #06
+time_features = fs.get_feature_groupe(name = "time_features", version= 1)  #07
 
 
 
 # Create a dataframe with the row you want to insert
-row_weather_lag = pd.DataFrame([{
+row_weather_lag = pd.DataFrame([{   #01
     "datetime_unix" : datetime_unix,
     "datetime": datetime,
     "temperature_lag_1": temperature_lag_1,
@@ -117,7 +117,7 @@ row_weather_lag = pd.DataFrame([{
 }])
 weather_lag.insert(row_weather_lag)
 
-row_aqi_lag = pd.DataFrame([{
+row_aqi_lag = pd.DataFrame([{    #02
     "datetime_unix" : datetime_unix,
     "datetime": datetime,
     "temperature_lag_1": temperature_lag_1,
@@ -135,8 +135,86 @@ row_aqi_lag = pd.DataFrame([{
 }])
 aqi_lag.insert(row_aqi_lag)
 
+row_weather_rolling = pd.DataFrame([{    #04
+    "datetime_unix" : datetime_unix,
+    "datetime": datetime,
+    "temperature_rolling_6": temperature_rolling_6,
+    "temperature_rolling_12": temperature_rolling_12,
+    "temperature_rolling_24": temperature_rolling_24,
+    "pressure_rolling_6": pressure_rolling_6,
+    "pressure_rolling_12": pressure_rolling_12,
+    "pressure_rolling_24": pressure_rolling_24,
+    "humidity_rolling_6": hummidity_rolling_6,
+    "humidity_rolling_12": humidity_rolling_12,
+    "humidity_rolling_24": humidity_rolling_24,
+    "precipitation_rolling_6": precipitation_rolling_6,
+    "precipitation_rolling_12": precipitation_rolling_12,
+    "precipitation_rolling_24": precipitation_rolling_24,  
+}])
+weather_rolling.insert(row_weather_rolling)
 
+row_aqi_rolling = pd.DataFrame([{    #03
+    "datetime_unix" : datetime_unix,
+    "datetime": datetime,
+    "aqi_rolling_6": aqi_rolling_6,
+    "aqi_rolling_12": aqi_rolling_12,
+    "aqiv_rolling_6": aqiv_rolling_6
+    "aqiv_rolling_12": aqiv_rolling_12,
+    "pm2_5_rolling_6": pm2_5_rolling_6,
+    "pm2_5_rolling_12": pm2_5_rolling_12,
+    "pm10_rolling_6": pm10_rolling_6,
+    "pm10_rolling_12":pm10_rolling_12,
+    "n02_rolling_6": no2_rolling_6,
+    "no2_rolling_12": no2_rolling_12,
+    "so2_rolling_6": so2_rolling_6,
+    "so2_rolling_12": so2_rolling_12,
+    "co_rolling_6": co_rolling_6,  
+    "co_rolling_12": co_rolling_12,
+    "o3_rolling_6": o3_rolling_6,
+    "o3_rolling_12": o3_rolling_12,
+  
+}])
+aqi_rolling.insert(row_aqi_rolling)
 
+row_weather_data = pd.DataFrame([{    #06
+    "datetime_unix" : datetime_unix,
+    "datetime": datetime,
+    "temperature": temperature_lag_1,
+    "relative_humidity": temperature_lag_3,
+    "surface_pressure": temperature_lag_6,
+    "wind_speed": pressure_lag_1,
+    "shortwave_radiation": pressure_lag_3,
+    "precipitation": pressure_lag_6,
+    "wind_direction_cos": hummidity_lag_1,
+    "wind_direction_sin": humidity_lag_3,  
+}])
+weather_data.insert(row_weather_data)
+
+row_aqi_data = pd.DataFrame([{   #05
+    "datetime_unix" : datetime_unix,
+    "datetime": datetime,
+    "aqi": aqi,
+    "aqi_value": aqi_value,
+    "no2": no2,
+    "so2": so2,
+    "co": co,
+    "o3": o3,
+    "pm2_5": pm2_5,
+    "pm10": pm10,  
+}])
+aqi_data.insert(row_aqi_data)
+
+row_time_features = pd.DataFrame([{    #07
+    "datetime_unix" : datetime_unix,
+    "datetime": datetime,
+    "hour_sin": hour_sin,
+    "hour_cos": hour_cos,
+    "day_sin": day_sin,
+    "day_cos": day_cos,
+    "month_sin": month_sin,
+    "month_cos": month_cos, 
+}])
+time_features.insert(row_time_features)
 
 
 
